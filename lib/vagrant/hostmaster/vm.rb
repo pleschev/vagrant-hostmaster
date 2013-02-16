@@ -22,6 +22,7 @@ module Vagrant
       end
 
       def add(options = {})
+        options.merge! config_to_h
         if process_local?(options)
           env.ui.info("Adding host entry for #{name} VM. Administrator privileges will be required...") unless options[:quiet]
           sudo add_command
@@ -36,6 +37,7 @@ module Vagrant
       end
 
       def list(options = {})
+        options.merge! config_to_h
         if process_local?(options)
           output = `#{list_command}`.chomp
           env.ui.info("[local] #{output}\n\n", :prefix => false) unless output.empty?
@@ -54,6 +56,7 @@ module Vagrant
       end
 
       def remove(options = {})
+        options.merge! config_to_h
         if process_local?(options)
           env.ui.info("Removing host entry for #{name} VM. Administrator privileges will be required...") unless options[:quiet]
           sudo remove_command
@@ -62,6 +65,7 @@ module Vagrant
       end
 
       def update(options = {})
+        options.merge! config_to_h
         if process_local?(options)
           env.ui.info("Updating host entry for #{name} VM. Administrator privileges will be required...") unless options[:quiet]
           sudo(remove_command) && sudo(add_command)
@@ -147,6 +151,14 @@ module Vagrant
           env.vms.each do |name,vm|
             yield Hostmaster::VM.new(vm) if vm.config.vm.networks.any? { |type,network_parameters| type == :hostonly } && vm.name != self.name
           end
+        end
+
+        def config_to_h
+		{
+			:local  => config.hosts.local.nil?  ? true  : config.hosts.local,
+			:guests => config.hosts.guests.nil? ? true  : config.hosts.guests,
+			:quiet  => config.hosts.quiet.nil?  ? false : config.hosts.quiet
+		}
         end
     end
   end
