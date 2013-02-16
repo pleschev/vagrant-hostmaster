@@ -154,11 +154,11 @@ module Vagrant
         end
 
         def config_to_h
-		{
-			:local  => config.hosts.local.nil?  ? true  : config.hosts.local,
-			:guests => config.hosts.guests.nil? ? true  : config.hosts.guests,
-			:quiet  => config.hosts.quiet.nil?  ? false : config.hosts.quiet
-		}
+          {
+            :local  => config.hosts.local.nil?  ? true  : config.hosts.local,
+            :guests => config.hosts.guests.nil? ? true  : config.hosts.guests,
+            :quiet  => config.hosts.quiet.nil?  ? false : config.hosts.quiet
+          }
         end
     end
   end
