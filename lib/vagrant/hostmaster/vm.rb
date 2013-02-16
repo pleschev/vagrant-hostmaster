@@ -149,7 +149,7 @@ module Vagrant
 
         def with_other_vms
           env.vms.each do |name,vm|
-            yield Hostmaster::VM.new(vm) if vm.config.vm.networks.any? { |type,network_parameters| type == :hostonly } && vm.name != self.name
+            yield Hostmaster::VM.new(vm) if vm.config.vm.networks.any? { |type,network_parameters| type == :hostonly } && vm.name != self.name && vm.state == :running
           end
         end
 
